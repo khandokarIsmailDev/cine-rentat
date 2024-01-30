@@ -2,14 +2,22 @@ import React from "react";
 import { useContext } from "react";
 import { MovieContext } from "../../context";
 import { getImgUrl } from "../../utils/cine-utility";
+import { toast } from "react-toastify";
 
 const CardDetail = ({ onClose }) => {
-  const { cartData, setCartData } = useContext(MovieContext);
+  const { state, dispatch } = useContext(MovieContext);
   // console.log(cartData)
 
   function handleRemoveCartItem(card){
-        const removeItem = cartData.filter(cart => cart.id !== card.id)
-        setCartData([...removeItem])
+
+    dispatch({
+      type:"REMOVE_CART",
+      payload : card
+    })
+
+    toast.success(`Movie ${card.title} successfully removed!`)
+        // const removeItem = cartData.filter(cart => cart.id !== card.id)
+        // setCartData([...removeItem])
   }
 
   return (
@@ -21,7 +29,7 @@ const CardDetail = ({ onClose }) => {
           </h2>
           <div className="space-y-8 lg:space-y-12 max-h-[450px] overflow-auto mb-10 lg:mb-14">
             {
-                cartData.length >0 ? (cartData.map((cart) => (
+                state.cartData.length >0 ? (state.cartData.map((cart) => (
                     <div key={cart.id} className="grid grid-cols-[1fr_auto] gap-4">
                       <div className="flex items-center gap-4">
                         <img
